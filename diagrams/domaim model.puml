@@ -1,0 +1,31 @@
+@startuml
+
+class Inputs
+class Outputs
+class Files
+class Program
+class Interactive
+class Graphical
+class NonGranpical
+class NonInteractive
+class Machine
+class User 
+
+User -- Machine : Logged In
+
+Machine "1" -- "*" Program : runs
+
+Program "1" -- "1.*" Outputs : creates 
+Program "1" -- "*" Inputs : ingests
+
+Program <|-- Interactive
+Program <|-- NonInteractive
+
+Interactive <|-- Graphical
+Interactive <|-- NonGranpical
+
+Inputs "1" -- "1..*" Files
+Outputs "1" --  "1..*" Files
+
+@enduml
+
