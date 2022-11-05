@@ -1,0 +1,67 @@
+@startuml
+
+class Program {
+    name : string
+    input_extensions : List[FileExtensions]
+    call : string
+    expected_output : string | regex
+    parameters : Map<String, String>
+
+    run(inputs)
+}
+
+class InteractiveProgram 
+class NonInteractiveProgram
+
+class File {
+    getPath() : filepath
+}
+
+class Input {
+    
+}
+
+class Output
+
+class JobSubmission 
+class JobSubmissionState
+class RunningState
+class CompletedState
+class PreparingState
+
+class JobSubmissionController {
+    createJob(inputs : filepath[], program : string, parameters : Map<string,string>) : path
+    runJob(jobId : path)
+    getJob(jobId : path)
+    getChildJobs() : path
+    getParentJobs() : path
+}
+
+class InputController {
+    getAvialablePrograms(filepath) : string
+}
+
+class ProgramController {
+    getProgram(filepath)
+}
+
+JobSubmissionController -[dashed]-> JobSubmission
+
+Input --> File
+Output --> File
+
+Program <|-- InteractiveProgram
+Program <|-- NonInteractiveProgram
+
+JobSubmission --> Program
+JobSubmission --> "*" Input
+JobSubmission --> "*" Output
+
+JobSubmissionState - JobSubmission
+JobSubmissionState <|-- PreparingState
+JobSubmissionState <|-- CompletedState
+JobSubmissionState <|-- RunningState
+
+
+@enduml
+

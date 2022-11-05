@@ -10,13 +10,18 @@ class NonGranpical
 class NonInteractive
 class Machine
 class User 
+class JobSubmission
 
 User -- Machine : Logged In
 
 Machine "1" -- "*" Program : runs
 
-Program "1" -- "1.*" Outputs : creates 
-Program "1" -- "*" Inputs : ingests
+
+Workflow "0..1" -- "1..*" JobSubmission : holds
+
+JobSubmission "1" -- "1" Program : uses
+JobSubmission "1" -- "1.*" Outputs : creates 
+JobSubmission "1" -- "*" Inputs : ingests
 
 Program <|-- Interactive
 Program <|-- NonInteractive

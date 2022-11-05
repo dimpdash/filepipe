@@ -1,0 +1,31 @@
+@startuml
+
+allow_mixing
+
+package "{id}" {
+    
+    object job.fp {
+        * program
+        * parameters
+    }
+
+    collections "linked input files"
+    collections "output files"
+
+}
+
+package programs {
+    package "{name}" {
+        object run.sh {
+
+        }
+
+        object properties.yaml {
+            * input file types
+            * interactive
+        }
+    }
+}
+
+
+@enduml
