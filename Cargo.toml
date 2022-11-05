@@ -10,5 +10,6 @@ name = "cli"
 path = "src/cli.rs"
 
 [dependencies]
-clap = "4.0.19"
-
+clap = {version = "4.0.19", features = ["derive"]}
+serde = "1.0"
+serde_yaml = "0.9"
