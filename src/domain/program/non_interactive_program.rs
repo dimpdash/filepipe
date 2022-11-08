@@ -14,6 +14,7 @@ impl NonInteractiveProgram {
 }
 
 impl Program for NonInteractiveProgram {
-    
-
+    fn get_name(&self) -> String {
+        self.dir.to_str().unwrap().to_string()
+    }
 }

@@ -1,5 +1,11 @@
 use std::{collections::HashMap, path::{Path}};
-use crate::{domain::{job_submission::{JobSubmissionId, JobSubmission}, input::Input, domain_object::DomainObject}, data_source::program_repository::{ProgramRepository, FindError}};
+
+use mockall_double::double;
+
+#[double]
+use crate::domain::input::Input;
+
+use crate::{domain::{job_submission::{JobSubmissionId, JobSubmission}, domain_object::DomainObject}, data_source::program_repository::{ProgramRepository, FindError}};
 
 pub struct JobSubissionControler;
 impl JobSubissionControler {
@@ -8,7 +14,7 @@ impl JobSubissionControler {
         let job_location = Path::new("./1");
         let program_repository = ProgramRepository::new(home.into());
 
-        let inputs = inputs.iter().map(|p| Input::new(p.to_path_buf())).collect();
+        let inputs = inputs.iter().map(|p| Input::new(p.to_path_buf()).unwrap()).collect();
 
         let program = program_repository.find(program)?;
 
