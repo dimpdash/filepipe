@@ -1,13 +1,13 @@
-use std::collections::{HashMap, BTreeMap};
+use std::collections::{BTreeMap, HashMap};
+use std::error::Error;
 use std::fs::File;
 use std::hash::Hash;
-use std::path::{PathBuf};
-use std::error::Error;
+use std::path::PathBuf;
 
 use mockall_double::double;
 
-use crate::domain::program::Program;
 use crate::domain::job_submission::job_submission_state::JobSubmissionState;
+use crate::domain::program::Program;
 
 use crate::domain::job_submission::job_submission_state::dead_state::DeadState;
 
@@ -15,42 +15,50 @@ use self::job_config::JobConfig;
 
 use super::domain_object::DomainObject;
 
-
-
 #[double]
 use super::input::Input;
 
-pub mod job_submission_state;
 pub mod job_config;
+pub mod job_submission_state;
 
 pub struct JobSubmission {
-    state : Box<dyn JobSubmissionState>,
-    program : Box<dyn Program>,
-    inputs : Vec<Input>,
-    location : PathBuf,
-    parameters : HashMap<String, String>
+    state: Box<dyn JobSubmissionState>,
+    program: Box<dyn Program>,
+    inputs: Vec<Input>,
+    location: PathBuf,
+    parameters: HashMap<String, String>,
 }
 
 impl JobSubmission {
-    pub fn new(program : Box<dyn Program>, inputs : Vec<Input>, location : PathBuf, parameters : HashMap<String, String>) -> Self {
-        let state = Box::new(DeadState{});
+    pub fn new(
+        program: Box<dyn Program>,
+        inputs: Vec<Input>,
+        location: PathBuf,
+        parameters: HashMap<String, String>,
+    ) -> Self {
+        let state = Box::new(DeadState {});
 
         JobSubmission {
             state,
             program,
             inputs,
             location,
-            parameters
+            parameters,
         }
+    }
+}
+
+impl JobSubmission {
+    pub fn get_location(&self) -> PathBuf {
+        self.location.clone()
     }
 }
 
 impl DomainObject for JobSubmission {
     fn insert(&self) -> Result<(), Box<dyn Error>> {
-        
         //create folder
         std::fs::create_dir_all(&self.location).map_err(|e| Box::new(e))?;
-        
+
         //create input links
         for input in self.inputs.iter() {
             input.add_link(&self.location).map_err(|e| Box::new(e))?
@@ -76,38 +84,28 @@ impl DomainObject for JobSubmission {
     }
 }
 
-pub type JobSubmissionId = String;
-
+pub type JobSubmissionId = PathBuf;
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn happy_path(){
-        use crate::domain::program::{MockProgram, self};
+    fn happy_path() {
+        use crate::domain::program::MockProgram;
 
         let mut input = Input::default();
-        input.expect_add_link()
-            .returning(|_| Ok(()))
-            .times(1);
-        
+        input.expect_add_link().returning(|_| Ok(())).times(1);
+
         let mut input2 = Input::default();
-            input2.expect_add_link()
-                .returning(|_| Ok(()))
-                .times(1);
+        input2.expect_add_link().returning(|_| Ok(())).times(1);
 
         let inputs = vec![input, input2];
         let program = Box::new(MockProgram::new());
         let location = PathBuf::from(".");
         let parameters = HashMap::new();
 
-        
         let j = JobSubmission::new(program, inputs, location, parameters);
         j.insert().unwrap();
-
-
     }
-
 }
-

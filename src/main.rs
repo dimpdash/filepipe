@@ -1,18 +1,10 @@
-use std::{path::{Path}, collections::HashMap};
+use std::{collections::HashMap, path::Path};
 
-use crate::controllers::job_submission_controller::JobSubissionControler;
+use crate::controllers::job_submission_controller::JobSubissionController;
 
-pub mod domain;
+pub mod app;
 pub mod controllers;
 pub mod data_source;
+pub mod domain;
 
-fn main() {
-    let inputs = vec![Path::new("./data.dat")];
-    let program = "copy";
-
-
-    JobSubissionControler::create_job(inputs, program, HashMap::new()).unwrap();
-    JobSubissionControler::run_job();
-
-}
-
+fn main() {}

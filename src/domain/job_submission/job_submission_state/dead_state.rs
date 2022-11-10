@@ -1,10 +1,6 @@
 use super::JobSubmissionState;
 
-
-
-pub struct DeadState {
-    
-}
+pub struct DeadState {}
 
 impl JobSubmissionState for DeadState {
     fn run(&self) {

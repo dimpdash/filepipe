@@ -1,4 +1,4 @@
-use clap::{Parser, arg};
+use clap::{arg, Parser};
 
 /// Search for a pattern in a file and display the lines that contain it.
 #[derive(Parser)]
@@ -12,8 +12,4 @@ struct Cli {
 
 fn main() {
     // let args = Cli::parse();
-
-    
-
-
 }

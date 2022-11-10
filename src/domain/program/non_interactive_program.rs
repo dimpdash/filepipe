@@ -2,14 +2,13 @@ use std::path::PathBuf;
 
 use super::Program;
 
-
 pub struct NonInteractiveProgram {
-    dir : PathBuf
+    dir: PathBuf,
 }
 
 impl NonInteractiveProgram {
-    pub fn new(dir : PathBuf) -> Self {
-        NonInteractiveProgram{dir : dir}
+    pub fn new(dir: PathBuf) -> Self {
+        NonInteractiveProgram { dir: dir }
     }
 }
 

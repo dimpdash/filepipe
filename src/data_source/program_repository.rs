@@ -1,22 +1,20 @@
-use std::{path::PathBuf, fs , ffi::OsStr};
+use std::{ffi::OsStr, fs, path::PathBuf};
 
-use crate::domain::program::{Program, non_interactive_program::NonInteractiveProgram};
+use crate::domain::program::{non_interactive_program::NonInteractiveProgram, Program};
 
 #[derive(Debug)]
 pub struct FindError;
 
 pub struct ProgramRepository {
-    home: PathBuf
+    home: PathBuf,
 }
 
 impl ProgramRepository {
-    pub fn new(home : PathBuf) -> Self {
-        ProgramRepository {
-            home
-        }
+    pub fn new(home: PathBuf) -> Self {
+        ProgramRepository { home }
     }
 
-    pub fn find(&self, id : &str) -> Result<Box<dyn Program>, FindError> {
+    pub fn find(&self, id: &str) -> Result<Box<dyn Program>, FindError> {
         let entites = fs::read_dir(&self.home).map_err(|_| FindError)?;
 
         for e in entites {
@@ -27,7 +25,7 @@ impl ProgramRepository {
                 }
             }
         }
-        
+
         return Err(FindError);
     }
 }
