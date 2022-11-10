@@ -1,10 +1,10 @@
-use std::{rc::Rc, sync::Arc};
+use std::{sync::Arc};
 
 use serde::{de, Deserialize, Deserializer, Serializer};
 
 use crate::{
-    app::{App, APP},
-    domain::{program::Program, programs},
+    app::{APP},
+    domain::{program::Program},
 };
 
 pub fn serialize_id<S>(rc: &Arc<dyn Program>, serializer: S) -> Result<S::Ok, S::Error>

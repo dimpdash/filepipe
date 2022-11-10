@@ -1,20 +1,18 @@
 use std::{
     collections::HashMap,
     path::{Path, PathBuf},
-    rc::Rc,
 };
 
-use mockall_double::double;
+
 
 use crate::{
     app::APP,
-    domain::input::{inputs::Inputs, Input},
+    domain::input::{Input},
 };
 
 use crate::{
-    app::App,
     data_source::{
-        job_submission_repository::JobSubmissionRepository, program_repository::FindError,
+        program_repository::FindError,
     },
     domain::{
         domain_object::DomainObject,
@@ -30,7 +28,7 @@ impl JobSubissionController {
     }
 
     fn get_new_job_dir(&self) -> Option<PathBuf> {
-        let mut app = APP.lock().unwrap();
+        let app = APP.lock().unwrap();
         let job_sub_repo = app.get_job_submission_repository();
 
         Some(job_sub_repo.get_new_job_dir().ok()?)
@@ -38,7 +36,7 @@ impl JobSubissionController {
 
     pub fn create_job(
         &self,
-        inputs: Vec<&Path>,
+        _inputs: Vec<&Path>,
         program: &str,
         parameters: HashMap<String, String>,
         job_location: Option<PathBuf>,

@@ -1,6 +1,6 @@
 use std::{collections::HashMap, error::Error, fs::File, path::PathBuf};
 
-use mockall::{automock, mock};
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]

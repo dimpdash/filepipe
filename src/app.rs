@@ -3,9 +3,9 @@ use std::sync::Mutex;
 
 use once_cell::sync::Lazy;
 
-use crate::data_source::job_submission_repository;
+
 use crate::data_source::{
-    job_submission_repository::JobSubmissionRepository, program_repository::ProgramRepository,
+    job_submission_repository::JobSubmissionRepository,
 };
 
 use crate::domain::programs::Programs;

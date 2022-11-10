@@ -1,15 +1,15 @@
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{HashMap};
 use std::error::Error;
-use std::fs::File;
-use std::hash::Hash;
+
+
 use std::path::PathBuf;
-use std::rc::Rc;
+
 use std::sync::Arc;
 
-use mockall_double::double;
-use serde::{Deserialize, Serialize};
 
-use crate::domain::job_submission::job_submission_state::JobSubmissionState;
+
+
+
 use crate::domain::program::Program;
 
 use crate::domain::job_submission::job_submission_state::dead_state::DeadState;
@@ -37,7 +37,7 @@ impl JobSubmission {
         location: PathBuf,
         parameters: HashMap<String, String>,
     ) -> Self {
-        let state = Box::new(DeadState {});
+        let _state = Box::new(DeadState {});
 
         JobSubmission {
             program,
@@ -60,7 +60,7 @@ impl DomainObject for JobSubmission {
         std::fs::create_dir_all(&self.location).map_err(|e| Box::new(e))?;
 
         //create input links
-        for input in self.inputs.iter() {
+        for _input in self.inputs.iter() {
             // input.add_link(&self.location).map_err(|e| Box::new(e))?
         }
 
@@ -88,7 +88,7 @@ pub type JobSubmissionId = PathBuf;
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    
 
     #[test]
     fn happy_path() {
