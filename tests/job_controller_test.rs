@@ -1,6 +1,7 @@
 use std::{
     collections::HashMap,
     path::{Path, PathBuf},
+    rc::Rc,
 };
 
 use filepipe::{
@@ -27,11 +28,7 @@ fn create_job() {
         PathBuf::from("./tests/artefacts/generated/integration/job_controller_test/create_job");
     let job_submission_repository = JobSubmissionRepository::new(default_job_location);
 
-    let app = Rc::new(App::new(
-        program_repository,
-        Some(job_submission_repository),
-    ));
-    let js = JobSubissionController::new(app);
+    let js = JobSubissionController::new();
 
     js.create_job(inputs, program, HashMap::new(), None)
         .unwrap();

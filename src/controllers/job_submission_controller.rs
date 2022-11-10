@@ -6,8 +6,10 @@ use std::{
 
 use mockall_double::double;
 
-#[double]
-use crate::domain::input::Input;
+use crate::{
+    app::APP,
+    domain::input::{inputs::Inputs, Input},
+};
 
 use crate::{
     app::App,
@@ -20,19 +22,18 @@ use crate::{
     },
 };
 
-pub struct JobSubissionController {
-    app: Rc<App>,
-}
+pub struct JobSubissionController {}
 
 impl JobSubissionController {
-    pub fn new(app: Rc<App>) -> Self {
-        JobSubissionController { app: app }
+    pub fn new() -> Self {
+        JobSubissionController {}
     }
 
     fn get_new_job_dir(&self) -> Option<PathBuf> {
-        let job_sub_repo = self.app.get_job_submission_repository();
+        let mut app = APP.lock().unwrap();
+        let job_sub_repo = app.get_job_submission_repository();
 
-        Some(job_sub_repo.as_ref()?.get_new_job_dir().ok()?)
+        Some(job_sub_repo.get_new_job_dir().ok()?)
     }
 
     pub fn create_job(
@@ -50,14 +51,16 @@ impl JobSubissionController {
 
         let job_location = job_location.unwrap();
 
-        let program_repository = self.app.get_program_repository();
+        let mut app = APP.lock().unwrap();
+        let programs = app.get_programs();
 
-        let inputs = inputs
-            .iter()
-            .map(|p| Input::new(p.to_path_buf()).unwrap())
-            .collect();
+        // let inputs = inputs
+        //     .iter()
+        //     .map(|p| Input::new(p.to_path_buf()).unwrap())
+        //     .collect();
+        let inputs: Vec<Box<dyn Input>> = vec![];
 
-        let program = program_repository.find(program)?;
+        let program = programs.get_program(program).unwrap();
 
         let job = JobSubmission::new(program, inputs, job_location, parameters);
 

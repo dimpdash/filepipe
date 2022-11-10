@@ -1,8 +1,9 @@
 use mockall::automock;
+use serde::{Deserialize, Serialize};
 
 pub mod non_interactive_program;
 
-#[automock]
-pub trait Program {
+#[typetag::serde(tag = "type")]
+pub trait Program: Send + Sync {
     fn get_name(&self) -> String;
 }

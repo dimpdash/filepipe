@@ -1,10 +1,46 @@
-use std::{collections::HashMap, path::Path};
+use std::{
+    collections::HashMap,
+    error::Error,
+    fs,
+    path::{Path, PathBuf},
+    rc::Rc,
+};
 
-use crate::controllers::job_submission_controller::JobSubissionController;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+
+use crate::{
+    app::{App, APP},
+    controllers::job_submission_controller::JobSubissionController,
+    domain::program::{non_interactive_program::NonInteractiveProgram, Program},
+};
 
 pub mod app;
 pub mod controllers;
 pub mod data_source;
 pub mod domain;
 
-fn main() {}
+#[derive(Serialize, Deserialize)]
+struct B {
+    id: u32,
+}
+
+struct C {
+    name: String,
+}
+
+fn main() {
+    let program = NonInteractiveProgram::new(PathBuf::from("./copy"));
+    let mut app = APP.lock().unwrap();
+    let programs = app.get_programs();
+    programs.add_program(Box::new(program));
+
+    let output = serde_yaml::to_string(&app.get_programs()).unwrap();
+
+    println!("{}", output);
+
+    // let f = fs::File::open(PathBuf::from("./test.yaml")).unwrap();
+
+    // let r: A = serde_yaml::from_reader(&f).unwrap();
+
+    // println!("{}", serde_yaml::to_string(&r).unwrap());
+}
