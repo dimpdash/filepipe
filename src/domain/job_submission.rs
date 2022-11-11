@@ -1,14 +1,9 @@
-use std::collections::{HashMap};
+use std::collections::HashMap;
 use std::error::Error;
-
 
 use std::path::PathBuf;
 
 use std::sync::Arc;
-
-
-
-
 
 use crate::domain::program::Program;
 
@@ -19,10 +14,12 @@ use crate::domain::input::Input;
 use self::job_config::JobConfig;
 
 use super::domain_object::DomainObject;
+use serde::{Deserialize, Serialize};
 
 pub mod job_config;
 pub mod job_submission_state;
 
+#[derive(Serialize, Deserialize)]
 pub struct JobSubmission {
     program: Arc<dyn Program>,
     inputs: Vec<Box<dyn Input>>,
@@ -88,7 +85,6 @@ pub type JobSubmissionId = PathBuf;
 
 #[cfg(test)]
 mod tests {
-    
 
     #[test]
     fn happy_path() {

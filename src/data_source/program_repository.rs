@@ -1,4 +1,4 @@
-use std::{ffi::OsStr, fs, path::PathBuf, rc::Rc};
+use std::{collections::HashMap, ffi::OsStr, fs, path::PathBuf, rc::Rc, sync::Arc};
 
 use crate::domain::program::{non_interactive_program::NonInteractiveProgram, Program};
 
@@ -7,25 +7,22 @@ pub struct FindError;
 
 pub struct ProgramRepository {
     home: PathBuf,
+    programs: HashMap<String, Arc<dyn Program>>,
 }
 
 impl ProgramRepository {
     pub fn new(home: PathBuf) -> Self {
-        ProgramRepository { home }
+        ProgramRepository {
+            home,
+            programs: HashMap::new(),
+        }
     }
 
-    pub fn find(&self, id: &str) -> Result<Rc<dyn Program>, FindError> {
-        let entites = fs::read_dir(&self.home).map_err(|_| FindError)?;
+    pub fn find(&self, id: &str) -> Result<Arc<dyn Program>, FindError> {
+        Ok(self.programs.get(id).ok_or(FindError)?.clone())
+    }
 
-        for e in entites {
-            if let Ok(d) = e {
-                let p = d.path();
-                if p.file_name() == Some(OsStr::new(id)) {
-                    return Ok(Rc::new(NonInteractiveProgram::new(p)));
-                }
-            }
-        }
-
-        return Err(FindError);
+    pub fn insert(&mut self, program: Box<dyn Program>) {
+        let _ = self.programs.insert(program.get_name(), Arc::from(program));
     }
 }

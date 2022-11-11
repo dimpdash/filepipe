@@ -1,11 +1,8 @@
-use std::{sync::Arc};
+use std::sync::Arc;
 
 use serde::{de, Deserialize, Deserializer, Serializer};
 
-use crate::{
-    app::{APP},
-    domain::{program::Program},
-};
+use crate::{app::APP, domain::program::Program};
 
 pub fn serialize_id<S>(rc: &Arc<dyn Program>, serializer: S) -> Result<S::Ok, S::Error>
 where
@@ -22,9 +19,9 @@ where
     let id = String::deserialize(deserializer)?;
 
     let mut app = APP.lock().unwrap();
-    let programs = app.get_programs();
+    let mut program_repo = app.get_program_repo();
 
-    programs
-        .get_program(&id)
-        .ok_or(de::Error::custom("key not found"))
+    program_repo
+        .find(&id)
+        .map_err(|_| de::Error::custom("key not found"))
 }

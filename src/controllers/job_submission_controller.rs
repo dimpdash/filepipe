@@ -3,17 +3,10 @@ use std::{
     path::{Path, PathBuf},
 };
 
-
-
-use crate::{
-    app::APP,
-    domain::input::{Input},
-};
+use crate::{app::APP, domain::input::Input};
 
 use crate::{
-    data_source::{
-        program_repository::FindError,
-    },
+    data_source::program_repository::FindError,
     domain::{
         domain_object::DomainObject,
         job_submission::{JobSubmission, JobSubmissionId},
@@ -28,8 +21,8 @@ impl JobSubissionController {
     }
 
     fn get_new_job_dir(&self) -> Option<PathBuf> {
-        let app = APP.lock().unwrap();
-        let job_sub_repo = app.get_job_submission_repository();
+        let mut app = APP.lock().unwrap();
+        let job_sub_repo = app.get_job_submission_repo();
 
         Some(job_sub_repo.get_new_job_dir().ok()?)
     }
@@ -50,7 +43,7 @@ impl JobSubissionController {
         let job_location = job_location.unwrap();
 
         let mut app = APP.lock().unwrap();
-        let programs = app.get_programs();
+        let programs = app.get_program_repo();
 
         // let inputs = inputs
         //     .iter()
@@ -58,7 +51,7 @@ impl JobSubissionController {
         //     .collect();
         let inputs: Vec<Box<dyn Input>> = vec![];
 
-        let program = programs.get_program(program).unwrap();
+        let program = programs.find(program).unwrap();
 
         let job = JobSubmission::new(program, inputs, job_location, parameters);
 
