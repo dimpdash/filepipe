@@ -1,7 +1,10 @@
 use std::rc::Rc;
 
-use super::{dependency::Dependencies, target::Targets, transformer::Transformer};
+use derive_new::new;
 
+use super::{file_specifier::Dependencies, file_specifier::Targets, transformer::Transformer};
+
+#[derive(new)]
 pub struct Job {
     dependencies: Dependencies,
     targets: Targets,

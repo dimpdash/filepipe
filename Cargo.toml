@@ -13,7 +13,12 @@ path = "src/cli.rs"
 [dependencies]
 clap = {version = "4.0.19", features = ["derive"]}
 derive_more = "0.99.17"
+thiserror = "1.0.37"
+serde = {version="1.0.147", features = ["derive"]}
+derive-new = "0.5.9"
+regex = "1.7.0"
+ambassador = "0.3.5"
+
+[dev-dependencies]
 mockall = "0.11.3"
 mockall_double = "0.3.0"
-thiserror = "1.0.37"
-diesel = "2.0.2"
